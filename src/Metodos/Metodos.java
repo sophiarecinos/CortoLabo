@@ -10,6 +10,7 @@ import java.util.ArrayList;
 /**
  *
  * @author LN710Q
+ * @param <Generic>
  */
 public interface Metodos<Generic> {
     public boolean create(Generic g);

@@ -8,7 +8,7 @@ package vista;
 import FiltroDao.FiltroDao;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import modelo.Filtro;
  *
  * @author LN710Q
  */
-public class Consulta extends JFrame{
+public final class Consulta extends JFrame{
     public JLabel lblAFP, lblNombre, lblApellido, lblEdad, lblProfesion, lblEstado;
     
     public JTextField afp, nombre, apellido, edad;
@@ -171,97 +171,82 @@ public class Consulta extends JFrame{
         FiltroDao fd = new FiltroDao();
         ArrayList<Filtro> filtros = fd.readAll();
 
-        for (Filtro fi : filtros) {
+        filtros.forEach((fi) -> {
             tm.addRow(new Object[]{fi.getAFP(), fi.getNombre(), fi.getApellido(), fi.getProfesion(), fi.getEstado()});
-        }
+        });
 
         resultados.setModel(tm);
     }
     public void eventos() {
-        insertar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                FiltroDao fd = new FiltroDao();
-                Filtro f = new Filtro(afp.getText(), nombre.getText(), apellido.getText(), Integer.parseInt(edad.getText()), profesion.getSelectedItem().toString(), true);
-
-                if (no.isSelected()) {
-                    f.setEstado(false);
-                }
-
-                if (fd.create(f)) {
-                    JOptionPane.showMessageDialog(null, "Filtro registrado");
-                    limpiarCampos();
-                    llenarTabla();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Problema al querer crear el filtro");
-                }
+        insertar.addActionListener((ActionEvent e) -> {
+            FiltroDao fd = new FiltroDao();
+            Filtro f = new Filtro(afp.getText(), nombre.getText(), apellido.getText(), Integer.parseInt(edad.getText()), profesion.getSelectedItem().toString(), true);
+            
+            if (no.isSelected()) {
+                f.setEstado(false);
             }
-             // ********************************
-        });
-
-        actualizar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                FiltroDao fd = new FiltroDao();
-                Filtro f = new Filtro(afp.getText(), nombre.getText(), apellido.getText(), Integer.parseInt(edad.getText()), profesion.getSelectedItem().toString(), true);
-
-                if (no.isSelected()) {
-                    f.setEstado(false);
-                }
-
-                if (fd.update(f)) {
-                    JOptionPane.showMessageDialog(null, "Filtro Modificado");
-                    limpiarCampos();
-                    llenarTabla();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Problemas al querer modificar el filtro");
-
-                }
-            }
-        });
-
-        eliminar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                FiltroDao fd = new FiltroDao();
-                if (fd.delete(afp.getText())) {
-                    JOptionPane.showMessageDialog(null, "Filtro Eliminado");
-                    limpiarCampos();
-                    llenarTabla();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Problema al querer eliminar el filtro");
-                }
-            }
-        });
-
-        buscar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                FiltroDao fd = new FiltroDao();
-                Filtro f = fd.read(afp.getText());
-                if (f == null) {
-                    JOptionPane.showMessageDialog(null, "Filtro no encontrado");
-                } else {
-                    afp.setText(f.getAFP());
-                    nombre.setText(f.getNombre());
-                    apellido.setText(f.getApellido());
-                    profesion.setSelectedItem(f.getProfesion());
-                    edad.setText(Integer.toString(f.getEdad()));
-
-                    if (f.getEstado()) {
-                        si.setSelected(true);
-                    } else {
-                        no.setSelected(true);
-                    }
-                }
-            }
-        });
-
-        limpiar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            
+            if (fd.create(f)) {
+                JOptionPane.showMessageDialog(null, "Filtro registrado");
                 limpiarCampos();
+                llenarTabla();
+            } else {
+                JOptionPane.showMessageDialog(null, "Problema al querer crear el filtro");
             }
+        } // ********************************
+        );
+
+        actualizar.addActionListener((ActionEvent e) -> {
+            FiltroDao fd = new FiltroDao();
+            Filtro f = new Filtro(afp.getText(), nombre.getText(), apellido.getText(), Integer.parseInt(edad.getText()), profesion.getSelectedItem().toString(), true);
+            
+            if (no.isSelected()) {
+                f.setEstado(false);
+            }
+            
+            if (fd.update(f)) {
+                JOptionPane.showMessageDialog(null, "Filtro Modificado");
+                limpiarCampos();
+                llenarTabla();
+            } else {
+                JOptionPane.showMessageDialog(null, "Problemas al querer modificar el filtro");
+                
+            }
+        });
+
+        eliminar.addActionListener((ActionEvent e) -> {
+            FiltroDao fd = new FiltroDao();
+            if (fd.delete(afp.getText())) {
+                JOptionPane.showMessageDialog(null, "Filtro Eliminado");
+                limpiarCampos();
+                llenarTabla();
+            } else {
+                JOptionPane.showMessageDialog(null, "Problema al querer eliminar el filtro");
+            }
+        });
+
+        buscar.addActionListener((ActionEvent e) -> {
+            FiltroDao fd = new FiltroDao();
+            Filtro f = fd.read(afp.getText());
+            if (f == null) {
+                JOptionPane.showMessageDialog(null, "Filtro no encontrado");
+            } else {
+                afp.setText(f.getAFP());
+                nombre.setText(f.getNombre());
+                apellido.setText(f.getApellido());
+                profesion.setSelectedItem(f.getProfesion());
+                edad.setText(Integer.toString(f.getEdad()));
+                
+                if (f.getEstado()) {
+                    si.setSelected(true);
+                } else {
+                    no.setSelected(true);
+                }
+            }
+        });
+
+        limpiar.addActionListener((ActionEvent e) -> {
+            limpiarCampos();
         });
 
         resultados.addMouseListener(new MouseAdapter() {

@@ -5,6 +5,7 @@
  */
 package FiltroDao;
 
+import Conexion.Conexion;
 import Metodos.Metodos;
 import com.mysql.jdbc.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,7 +32,7 @@ public class FiltroDao implements Metodos<Filtro>{
         //Nos servira para preparar la consulta de INSERT 
         PreparedStatement ps;
         try{
-            ps=con.getCnx().prepareStatement(SQL_INSERT);
+            ps=(PreparedStatement) con.getCnx().prepareStatement(SQL_INSERT);
             ps.setString(1, g.getAFP());
             ps.setString(2,g.getNombre());
             ps.setString(3,g.getApellido());
@@ -55,7 +56,7 @@ public class FiltroDao implements Metodos<Filtro>{
     public boolean delete(Object key) {
         PreparedStatement ps;
         try{
-             ps=con.getCnx().prepareStatement(SQL_DELETE);
+             ps=(PreparedStatement) con.getCnx().prepareStatement(SQL_DELETE);
              ps.setString(1, key.toString());
              if(ps.executeUpdate()>0){
                  return true;
@@ -75,7 +76,7 @@ public class FiltroDao implements Metodos<Filtro>{
         PreparedStatement ps;
         try{
             System.out.println(c.getAFP());
-            ps=con.getCnx().prepareStatement(SQL_UPDATE);
+            ps=(PreparedStatement) con.getCnx().prepareStatement(SQL_UPDATE);
             ps.setString(1, c.getNombre());
             ps.setString(2, c.getApellido());
             ps.setString(3, c.getProfesion());
@@ -98,7 +99,7 @@ public class FiltroDao implements Metodos<Filtro>{
         Filtro f = null;
         ResultSet rs;
          try{
-            ps=con.getCnx().prepareStatement(SQL_READ);
+            ps=(PreparedStatement) con.getCnx().prepareStatement(SQL_READ);
             ps.setString(1, key.toString());
             
             rs=ps.executeQuery();
