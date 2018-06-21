@@ -8,6 +8,8 @@ package vista;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -177,8 +179,7 @@ public class Consulta extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 FiltroDao fd = new FiltroDao();
-                Filtro f = new Filtro(afp.getText(), profesion.getSelectedItem().toString(),
-                        Integer.parseInt(nombre.getText()), true);
+                Filtro f = new Filtro(afp.getText(), nombre.getText(), apellido.getText(), Integer.parseInt(edad.getText()), profesion.getSelectedItem().toString(), true);
 
                 if (no.isSelected()) {
                     f.setExistencia(false);
@@ -192,19 +193,14 @@ public class Consulta extends JFrame{
                     JOptionPane.showMessageDialog(null, "Problema al querer crear el filtro");
                 }
             }
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+             // ********************************
         });
 
         actualizar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 FiltroDao fd = new FiltroDao();
-                Filtro f = new Filtro(codigo.getText(), marca.getSelectedItem().toString(),
-                        Integer.parseInt(stock.getText()), true);
+                Filtro f = new Filtro(afp.getText(), nombre.getText(), apellido.getText(), Integer.parseInt(edad.getText()), profesion.getSelectedItem().toString(), true);
 
                 if (no.isSelected()) {
                     f.setExistencia(false);
@@ -225,7 +221,7 @@ public class Consulta extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 FiltroDao fd = new FiltroDao();
-                if (fd.delete(codigo.getText())) {
+                if (fd.delete(afp.getText())) {
                     JOptionPane.showMessageDialog(null, "Filtro Eliminado");
                     limpiarCampos();
                     llenarTabla();
@@ -239,15 +235,17 @@ public class Consulta extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 FiltroDao fd = new FiltroDao();
-                Filtro f = fd.read(codigo.getText());
+                Filtro f = fd.read(afp.getText());
                 if (f == null) {
                     JOptionPane.showMessageDialog(null, "Filtro no encontrado");
                 } else {
-                    codigo.setText(f.getCodigo());
-                    marca.setSelectedItem(f.getMarca());
-                    stock.setText(Integer.toString(f.getStock()));
+                    afp.setText(f.getAFP());
+                    nombre.setText(f.getNombre());
+                    apellido.setText(f.getApellido());
+                    profesion.setSelectedItem(f.getProfesion());
+                    edad.setText(Integer.toString(f.getEdad()));
 
-                    if (f.getExistencia()) {
+                    if (f.getEstado()) {
                         si.setSelected(true);
                     } else {
                         no.setSelected(true);
@@ -267,10 +265,12 @@ public class Consulta extends JFrame{
             @Override
             public void mouseClicked(MouseEvent evnt) {
                 if (evnt.getClickCount() == 1) {
-                    codigo.setText(resultados.getValueAt(resultados.getSelectedRow(), 0).toString());
-                    marca.setSelectedItem(resultados.getValueAt(resultados.getSelectedRow(), 1).toString());
-                    stock.setText(resultados.getValueAt(resultados.getSelectedRow(), 2).toString());
-                    if (resultados.getValueAt(resultados.getSelectedRow(), 3).toString() == "false") {
+                    afp.setText(resultados.getValueAt(resultados.getSelectedRow(), 0).toString());
+                    nombre.setText(resultados.getValueAt(resultados.getSelectedRow(), 1).toString());
+                    apellido.setText(resultados.getValueAt(resultados.getSelectedRow(), 2).toString());
+                    profesion.setSelectedItem(resultados.getValueAt(resultados.getSelectedRow(), 3).toString());
+                    //estado.setSelected(resultados.getValueAt(resultados.getSelectedRow(), 4).toString(), true);
+                    if ("false".equals(resultados.getValueAt(resultados.getSelectedRow(), 4).toString())) {
                         no.setSelected(true);
                     } else {
                         si.setSelected(true);
@@ -279,6 +279,15 @@ public class Consulta extends JFrame{
             }
         });
 }
+     public void limpiarCampos() {
+        afp.setText("");
+        nombre.setText("");
+        apellido.setText("");
+        edad.setText("");
+        profesion.setSelectedItem("Ingeniero");
+    }
+
+
     
     
     
