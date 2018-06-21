@@ -5,11 +5,13 @@
  */
 package vista;
 
+import FiltroDao.FiltroDao;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -22,6 +24,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import modelo.Filtro;
 // afp, nombre, apellido, edad, profesion combobox, estado*
 /**
  *
@@ -169,7 +172,7 @@ public class Consulta extends JFrame{
         ArrayList<Filtro> filtros = fd.readAll();
 
         for (Filtro fi : filtros) {
-            tm.addRow(new Object[]{fi.getAFP(), fi.getNombre(), fi.getApellidos(), fi.getProfesion(), fi.getEstado()});
+            tm.addRow(new Object[]{fi.getAFP(), fi.getNombre(), fi.getApellido(), fi.getProfesion(), fi.getEstado()});
         }
 
         resultados.setModel(tm);
@@ -182,7 +185,7 @@ public class Consulta extends JFrame{
                 Filtro f = new Filtro(afp.getText(), nombre.getText(), apellido.getText(), Integer.parseInt(edad.getText()), profesion.getSelectedItem().toString(), true);
 
                 if (no.isSelected()) {
-                    f.setExistencia(false);
+                    f.setEstado(false);
                 }
 
                 if (fd.create(f)) {
@@ -203,7 +206,7 @@ public class Consulta extends JFrame{
                 Filtro f = new Filtro(afp.getText(), nombre.getText(), apellido.getText(), Integer.parseInt(edad.getText()), profesion.getSelectedItem().toString(), true);
 
                 if (no.isSelected()) {
-                    f.setExistencia(false);
+                    f.setEstado(false);
                 }
 
                 if (fd.update(f)) {
